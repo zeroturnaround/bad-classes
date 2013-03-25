@@ -28,10 +28,18 @@ public class BadClasses {
       System.exit(1);
     }
 
-    final String badAssVersion = getSystemPropertyOrExit("badversion");
+    final String badAssVersion = getSystemPropertyOrExit("version");
     for (int i = 0; i < args.length; i++) {
       final File inputFile = new File(args[i]);
-
+      if (!inputFile.exists()) {
+        try {
+          System.out.println("File " + inputFile.getCanonicalPath() + " doesn't exist. Skipping.");
+        }
+        catch (IOException e) {
+          e.printStackTrace();
+        }
+        continue;
+      }
       ZipUtil.iterate(inputFile, new ZipEntryCallback() {
         public void process(InputStream arg0, ZipEntry arg1) throws IOException {
           incrementFilesProcessed();
@@ -116,7 +124,7 @@ public class BadClasses {
   public static void showHelp() {
     System.out.println("Usage:");
     System.out.println("\tinputFile1.jar inputFile2.jar ...");
-    System.out.println("\t-Dbadversion=version-to-search-for");
+    System.out.println("\t-Dversion=version-to-search-for");
     System.out.println("Optional param -vers to print out all versions supported");
   }
 }
