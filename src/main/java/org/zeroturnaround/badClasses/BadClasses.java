@@ -1,4 +1,4 @@
-package org.zeroturnaround;
+package org.zeroturnaround.badclasses;
 
 import java.io.DataInputStream;
 import java.io.File;

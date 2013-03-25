@@ -52,7 +52,7 @@
 					<archive>
 						<index>true</index>
 						<manifestEntries>
-							<Main-Class>org.zeroturnaround.BadClasses</Main-Class>
+							<Main-Class>org.zeroturnaround.badclasses.BadClasses</Main-Class>
 						</manifestEntries>
 						<addMavenDescriptor>false</addMavenDescriptor>
 					</archive>
