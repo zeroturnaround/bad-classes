@@ -10,6 +10,10 @@ import org.zeroturnaround.zip.ZipEntryCallback;
 import org.zeroturnaround.zip.ZipUtil;
 
 public class BadClasses {
+  private static boolean badClassesFound = false;
+  private static int noZipProcessed = 0;
+  private static int filesProcessed = 0;
+
   public static void main(String[] args) {
     if (args.length > 1 && "vers".equals(args[0])) {
       System.out.println("1.3");
@@ -19,20 +23,44 @@ public class BadClasses {
       System.out.println("1.7");
     }
 
-    final String inputFileName = getSystemPropertyOrExit("in");
-    final File inputFile = new File(inputFileName);
-    final String badAssVersion = getSystemPropertyOrExit("badassversion");
+    if (args.length == 0) {
+      System.out.println("Please specify input file to analyze");
+      System.exit(1);
+    }
 
-    ZipUtil.iterate(inputFile, new ZipEntryCallback() {
-      public void process(InputStream arg0, ZipEntry arg1) throws IOException {
-        if (!arg1.getName().endsWith("class"))
-          return;
-        String ver = determineVersion(arg0, arg1.getName());
-        if (badAssVersion.equals(ver)) {
-          System.out.println(ver+" "+arg1.getName());
+    final String badAssVersion = getSystemPropertyOrExit("badversion");
+    for (int i = 0; i < args.length; i++) {
+      final File inputFile = new File(args[i]);
+
+      ZipUtil.iterate(inputFile, new ZipEntryCallback() {
+        public void process(InputStream arg0, ZipEntry arg1) throws IOException {
+          incrementFilesProcessed();
+          // skip all non class files
+          if (!arg1.getName().endsWith("class"))
+            return;
+          String ver = determineVersion(arg0, arg1.getName());
+          if (badAssVersion.equals(ver)) {
+            System.out.println(inputFile.getName() + ": " + ver + " " + arg1.getName());
+            badClassesFound();
+          }
         }
-      }
-    });
+      });
+      noZipProcessed++;
+    }
+
+    System.out.println("Processed " + noZipProcessed + " ZIP archive(s)");
+    System.out.println("Processed " + filesProcessed + " individual file(s)");
+    if (!badClassesFound) {
+      System.out.println("No classes with version " + badAssVersion + " found");
+    }
+  }
+
+  protected static void incrementFilesProcessed() {
+    filesProcessed++;
+  }
+
+  protected static void badClassesFound() {
+    badClassesFound = true;
   }
 
   public static String determineVersion(InputStream in, String entryName) {
@@ -87,8 +115,8 @@ public class BadClasses {
 
   public static void showHelp() {
     System.out.println("Usage:");
-    System.out.println("\t-Din=jar-file-to-analyz");
-    System.out.println("\t-Dbadassversion=version-to-search-for");
+    System.out.println("\tinputFile1.jar inputFile2.jar ...");
+    System.out.println("\t-Dbadversion=version-to-search-for");
     System.out.println("Optional param -vers to print out all versions supported");
   }
 }
