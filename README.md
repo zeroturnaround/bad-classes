@@ -8,3 +8,5 @@ The following command will find all Java 1.3 class files from someJarfile.jar
 ```bash
   java -Dversion=1.3 -jar target/bad-classes.jar someJarFile.jar 
 ```
+
+You want to process more files at a time? Sure thing. The utility takes any number of ZIP files as arguments.
