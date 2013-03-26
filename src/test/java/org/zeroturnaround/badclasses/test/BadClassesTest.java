@@ -37,15 +37,21 @@ public class BadClassesTest extends TestCase {
     assertEquals("1.4", ver);
   }
 
+  public void testVersion13() throws Exception {
+    URL url = BadClassesTest.class.getResource("/1.3/SampleClass.class");
+    String ver = BadClasses.determineVersion(url.openStream(), "SampleClass");
+    assertEquals("1.3", ver);
+  }
+  
   public void testVersion12() throws Exception {
     URL url = BadClassesTest.class.getResource("/1.2/SampleClass.class");
     String ver = BadClasses.determineVersion(url.openStream(), "SampleClass");
     assertEquals("1.2", ver);
   }
-
-  public void testVersion13() throws Exception {
-    URL url = BadClassesTest.class.getResource("/1.3/SampleClass.class");
+  
+  public void testVersion11() throws Exception {
+    URL url = BadClassesTest.class.getResource("/1.1/SampleClass.class");
     String ver = BadClasses.determineVersion(url.openStream(), "SampleClass");
-    assertEquals("1.3", ver);
+    assertEquals("1.1", ver);
   }
 }

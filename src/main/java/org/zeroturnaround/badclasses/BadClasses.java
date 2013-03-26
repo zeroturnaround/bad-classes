@@ -18,9 +18,10 @@ public class BadClasses {
     if (args.length > 1 && "vers".equals(args[0])) {
       System.out.println("1.3");
       System.out.println("1.4");
-      System.out.println("1.5");
-      System.out.println("1.6");
-      System.out.println("1.7");
+      System.out.println("5");
+      System.out.println("6");
+      System.out.println("7");
+      System.out.println("8");
     }
 
     if (args.length == 0) {
