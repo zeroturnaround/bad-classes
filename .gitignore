@@ -7,3 +7,4 @@ target/dependency-reduced-pom.xml
 target/original-bad-classes.jar
 target/surefire
 bin
+target/surefire-reports
