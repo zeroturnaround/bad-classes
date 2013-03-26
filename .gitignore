@@ -8,3 +8,6 @@ target/original-bad-classes.jar
 target/surefire
 bin
 target/surefire-reports
+target/cobertura/
+target/generated-classes/
+target/site/
