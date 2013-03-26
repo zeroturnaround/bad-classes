@@ -76,6 +76,7 @@ public class BadClasses {
     try {
       DataInputStream dis = new DataInputStream(in);
       int magic = dis.readInt();
+      // lets ignore non Java class files
       if (magic != 0xcafebabe) {
         return null;
       }
@@ -84,21 +85,31 @@ public class BadClasses {
       int major = dis.readShort();
 
       String version = null;
-
-      if (major < 48) {
+      // the versions are outlined in this article
+      // http://en.wikipedia.org/wiki/Java_class_file
+      if (major == 45) {
+        version = "1.1";
+      }
+      else if (major == 46) {
+        version = "1.2";
+      }
+      else if (major == 47) {
         version = "1.3";
       }
       else if (major == 48) {
         version = "1.4";
       }
       else if (major == 49) {
-        version = "1.5";
+        version = "5";
       }
       else if (major == 50) {
-        version = "1.6";
+        version = "6";
       }
-      else {
-        version = "1.7";
+      else if (major == 51){
+        version = "7";
+      }
+      else if (major == 52){
+        version = "8";
       }
       return version;
     }
