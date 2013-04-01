@@ -7,11 +7,11 @@ import junit.framework.TestCase;
 import org.zeroturnaround.badclasses.BadClasses;
 
 public class BadClassesTest extends TestCase {
-//  public void testVersion8() throws Exception {
-//    URL url = BadClassesTest.class.getResource("/8/SampleClass.class");
-//    String ver = BadClasses.determineVersion(url.openStream(), "SampleClass");
-//    assertEquals("8", ver);
-//  }
+  public void testVersion8() throws Exception {
+    URL url = BadClassesTest.class.getResource("/8/SampleClass.class");
+    String ver = BadClasses.determineVersion(url.openStream(), "SampleClass");
+    assertEquals("8", ver);
+  }
 
   public void testVersion7() throws Exception {
     URL url = BadClassesTest.class.getResource("/7/SampleClass.class");
