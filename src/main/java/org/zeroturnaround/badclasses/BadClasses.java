@@ -15,13 +15,16 @@ public class BadClasses {
   private static int filesProcessed = 0;
 
   public static void main(String[] args) {
-    if (args.length > 1 && "vers".equals(args[0])) {
+    if (args.length > 0 && "vers".equals(args[0])) {
+      System.out.println("Following versions are supported:");
       System.out.println("1.3");
       System.out.println("1.4");
-      System.out.println("5");
-      System.out.println("6");
-      System.out.println("7");
-      System.out.println("8");
+      System.out.println("1.5");
+      System.out.println("1.6");
+      System.out.println("1.7");
+      System.out.println("1.8");
+      System.out.println("1.9");
+      System.exit(0);
     }
 
     if (args.length == 0) {
@@ -29,7 +32,8 @@ public class BadClasses {
       System.exit(1);
     }
 
-    final String badAssVersion = getSystemPropertyOrExit("version");
+    final String badVersion = getSystemPropertyOrExit("version");
+
     for (int i = 0; i < args.length; i++) {
       final File inputFile = new File(args[i]);
       if (!inputFile.exists()) {
@@ -41,16 +45,17 @@ public class BadClasses {
         }
         continue;
       }
+
       ZipUtil.iterate(inputFile, new ZipEntryCallback() {
         public void process(InputStream arg0, ZipEntry arg1) throws IOException {
-          incrementFilesProcessed();
-          // skip all non class files
+          filesProcessed++;
+          // skip non class files
           if (!arg1.getName().endsWith("class"))
             return;
           String ver = determineVersion(arg0, arg1.getName());
-          if (badAssVersion.equals(ver)) {
+          if (badVersion.equals(ver)) {
             System.out.println(inputFile.getName() + ": " + ver + " " + arg1.getName());
-            badClassesFound();
+            badClassesFound = true;
           }
         }
       });
@@ -60,16 +65,8 @@ public class BadClasses {
     System.out.println("Processed " + noZipProcessed + " ZIP archive(s)");
     System.out.println("Processed " + filesProcessed + " individual file(s)");
     if (!badClassesFound) {
-      System.out.println("No classes with version " + badAssVersion + " found");
+      System.out.println("No classes with version " + badVersion + " found");
     }
-  }
-
-  protected static void incrementFilesProcessed() {
-    filesProcessed++;
-  }
-
-  protected static void badClassesFound() {
-    badClassesFound = true;
   }
 
   public static String determineVersion(InputStream in, String entryName) {
@@ -82,12 +79,11 @@ public class BadClasses {
         return null;
       }
 
-      int minor = dis.readShort();
+      dis.readShort();
       int major = dis.readShort();
 
       String version = null;
-      // the versions are outlined in this article
-      // http://en.wikipedia.org/wiki/Java_class_file
+
       if (major == 45) {
         version = "1.1";
       }
@@ -101,16 +97,19 @@ public class BadClasses {
         version = "1.4";
       }
       else if (major == 49) {
-        version = "5";
+        version = "1.5";
       }
       else if (major == 50) {
-        version = "6";
+        version = "1.6";
       }
-      else if (major == 51){
-        version = "7";
+      else if (major == 51) {
+        version = "1.7";
       }
-      else if (major == 52){
-        version = "8";
+      else if (major == 52) {
+        version = "1.8";
+      }
+      else {
+        version = "1.9";
       }
       return version;
     }
