@@ -29,7 +29,9 @@ public class BadClasses {
 
     if (args.length == 0) {
       System.out.println("Please specify input file to analyze");
-      System.exit(1);
+      System.out.println();
+      showHelp();
+      System.exit(0);
     }
 
     final String badVersion = getSystemPropertyOrExit("version");
